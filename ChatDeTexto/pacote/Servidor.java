@@ -1,37 +1,81 @@
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 
 public class Servidor {
         public static final int porta = 15001;
         private ServerSocket serverSocket;
+        private final List <ClienteSocket> clientes = new LinkedList<>();
+        private final List <String> allMsg = new LinkedList<>();
+        
 
 
 
-        public void start() throws IOException{
+        private void start() throws IOException{
             System.out.println("SERVIDOR ONLINE ");
             System.out.println("PORTA USADA: " + porta);
             serverSocket = new ServerSocket(porta);
             conexaoLoopCliente();
         }
         
-        public void finalizar () throws IOException{
-            serverSocket.close();
-        }
 
         private void conexaoLoopCliente() throws IOException{
                 while(true){
-                Socket socketeCliente = serverSocket.accept();
-                System.out.println("CLIENTE " + socketeCliente.getRemoteSocketAddress() + " ONLINE");
-                BufferedReader in = new BufferedReader(new InputStreamReader(socketeCliente.getInputStream()));
-                String msg = in.readLine();
-                System.out.println("Cliente: " + socketeCliente.getRemoteSocketAddress() + ": " + msg);    
+                ClienteSocket socketeCliente = new ClienteSocket(serverSocket.accept());
+                clientes.add(socketeCliente);
+
+                for(String msg : allMsg){
+                    msgAll(socketeCliente, msg);
+                }
+
+
+                
+                new Thread(() -> clienteMsgLoop(socketeCliente)).start();
+
+
                 }
         }
+
+        private void clienteMsgLoop(ClienteSocket socketeCliente){
+            String msg;
+            try{
+            while((msg = socketeCliente.getMsg()) != null){
+                if("sair".equalsIgnoreCase(msg)) return;
+
+               
+                System.out.println("Cliente: " + socketeCliente.getRemoteSocketAddress() + "Enviou: " + msg);
+                allMsg.add(msg);
+                msgTds(socketeCliente, msg);
+            }
+        } finally {socketeCliente.close();}
+    }
+        private void msgTds(ClienteSocket emissor, String msg){
+            Iterator <ClienteSocket> iterator = clientes.iterator();
+            while(iterator.hasNext()){
+                ClienteSocket clienteSocket = iterator.next();
+                if(!emissor.equals(clienteSocket)){
+                if (!clienteSocket.sendMsg(msg)){
+                iterator.remove();
+                }
+            }
+        }
+
+        }
+
+        private void msgAll(ClienteSocket emissor, String msg){
+            Iterator <ClienteSocket> iterator = clientes.iterator();
+            while(iterator.hasNext()){
+                ClienteSocket clienteSocket = iterator.next();
+                if(emissor.equals(clienteSocket)){
+                    clienteSocket.sendMsg(msg);
+                }
+            }
+        }
+
+
 
         public static void main (String[] args) throws Exception{
         

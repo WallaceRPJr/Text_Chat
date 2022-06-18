@@ -6,10 +6,14 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketAddress;
 
+
 public class ClienteSocket {
     private  Socket socket;
-    private  BufferedReader in;
-    private  PrintWriter out;
+    private  BufferedReader in; // Obj de Entrada
+    private  PrintWriter out;  // Obj de Saida
+
+
+
 
     public ClienteSocket(Socket socket) throws IOException{
         this.socket = socket;
@@ -23,7 +27,7 @@ public class ClienteSocket {
     }
      
 
-    public String getMessage(){
+    public String getMsg(){
         try {
             return in.readLine();
         } catch (IOException e) {
@@ -47,5 +51,4 @@ public class ClienteSocket {
         }
         
     }
-
 }
