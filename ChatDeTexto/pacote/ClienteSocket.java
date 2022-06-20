@@ -1,4 +1,3 @@
-
 import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,14 +5,10 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-
 public class ClienteSocket {
     private  Socket socket;
     private  BufferedReader in; // Obj de Entrada
     private  PrintWriter out;  // Obj de Saida
-
-
-
 
     public ClienteSocket(Socket socket) throws IOException{
         this.socket = socket;
@@ -26,7 +21,6 @@ public class ClienteSocket {
         return  socket.getRemoteSocketAddress(); 
     }
      
-
     public String getMsg(){
         try {
             return in.readLine();
@@ -34,7 +28,6 @@ public class ClienteSocket {
            return null;
         }
     }
-
 
     public boolean sendMsg(String msg){
         out.println(msg);
@@ -49,6 +42,5 @@ public class ClienteSocket {
         } catch (IOException e) {
             System.out.println("ERRO: " + e.getMessage());
         }
-        
     }
 }

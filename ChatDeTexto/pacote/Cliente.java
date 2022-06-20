@@ -1,8 +1,6 @@
-
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.Calendar;
@@ -15,7 +13,6 @@ public class Cliente implements Runnable {
     private String nome;
     ClienteSocket clientSocket;
     Date d = new Date();
-
 
     public void start() throws UnknownHostException, IOException{
         try{  
@@ -36,12 +33,15 @@ public class Cliente implements Runnable {
         System.out.println("PARA SAIR DIGITE SAIR");
     do{
         msg = in.nextLine();
+        if(msg.equalsIgnoreCase("sair"))msg = "desconectou";
+
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         Date hora = Calendar.getInstance().getTime(); 
         String data = sdf.format(hora);
         clientSocket.sendMsg(nome + ": " + msg + " " + data );
 
-        System.out.println("=====================================");
+        if(msg.equalsIgnoreCase("desconectou"))msg = "sair";
+
     }while(!msg.equalsIgnoreCase("sair"));
     }
 
@@ -59,19 +59,13 @@ public class Cliente implements Runnable {
         nome = in.nextLine();
     }
 
-
-
-    public static void main (String [] args) throws Exception{
-        
+    public static void main (String [] args) throws Exception{    
       try{
         Cliente cliente = new Cliente();
       cliente.start();
     }catch(IOException e){
         System.out.println("ERRO AO INICIAR CLIENTE" + e.getMessage());
     }
-
     System.out.println("CLIENTE FINALIZADO");
 }
-
-
 }
