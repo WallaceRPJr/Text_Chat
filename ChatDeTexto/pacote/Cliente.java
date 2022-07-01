@@ -3,26 +3,36 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+
+
+
 import java.util.Calendar;
 import java.util.Date;
 
-public class Cliente implements Runnable {
-    private static final String ip = "192.168.2.105";
-    private final int porta = Servidor.porta; 
+public class Cliente implements Runnable{
+    private String ip;
+    private int porta;
     private Scanner in = new Scanner(System.in);
     private String nome;
     ClienteSocket clientSocket;
     Date d = new Date();
 
+    public Cliente(String nome, int porta, String ip){
+        this.ip = ip;
+        this.nome = nome;
+        this.porta = porta;
+
+    }
+
+
     public void start() throws UnknownHostException, IOException{
-        try{  
-         setName();   
+        try{
          clientSocket = new ClienteSocket(new Socket(ip, porta)); 
         System.out.println("=====================================");
         System.out.println("CONEXÃO FEITA COM O SERVERVIDOR NA PORTA: " + porta);
         System.out.println("=====================================");
 
-        new Thread(this).start();
+       // new Thread(this).start();
         loopMensagem();
         } finally{clientSocket.close();}
     }
@@ -54,18 +64,5 @@ public class Cliente implements Runnable {
         }
     }
 
-    private void setName(){
-        System.out.println("DIGITE SEU NOME: ");
-        nome = in.nextLine();
-    }
 
-    public static void main (String [] args) throws Exception{    
-      try{
-        Cliente cliente = new Cliente();
-      cliente.start();
-    }catch(IOException e){
-        System.out.println("ERRO AO INICIAR CLIENTE" + e.getMessage());
-    }
-    System.out.println("CLIENTE FINALIZADO");
-}
 }
