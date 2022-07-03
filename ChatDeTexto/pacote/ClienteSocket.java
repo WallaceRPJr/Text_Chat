@@ -6,11 +6,13 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 public class ClienteSocket {
+    private  String login;
     private  Socket socket;
     private  BufferedReader in; // Obj de Entrada
     private  PrintWriter out;  // Obj de Saida
 
-    public ClienteSocket(Socket socket) throws IOException{
+    public ClienteSocket(Socket socket, String login) throws IOException{
+        this.login = login;
         this.socket = socket;
         System.out.println("CLIENTE " + socket.getRemoteSocketAddress() + " ONLINE");
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -19,6 +21,9 @@ public class ClienteSocket {
 
     public SocketAddress getRemoteSocketAddress(){
         return  socket.getRemoteSocketAddress(); 
+    }
+    public String getNome(){
+        return login;
     }
      
     public String getMsg(){
@@ -33,6 +38,7 @@ public class ClienteSocket {
         out.println(msg);
         return !out.checkError();
     }
+
 
     public void close(){
         try {

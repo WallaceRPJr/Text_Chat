@@ -2,17 +2,12 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.Scanner;
-
-
-
 import java.util.Calendar;
 import java.util.Date;
 
 public class Cliente implements Runnable{
     private String ip;
     private String porta;
-    private Scanner in = new Scanner(System.in);
     private String nome;
     ClienteSocket clientSocket;
     Date d = new Date();
@@ -27,7 +22,7 @@ public class Cliente implements Runnable{
 
     public void start() throws UnknownHostException, IOException{
         try{
-         clientSocket = new ClienteSocket(new Socket(ip, Integer.parseInt(porta))); 
+         clientSocket = new ClienteSocket(new Socket(ip, Integer.parseInt(porta)), nome); 
         System.out.println("=====================================");
         System.out.println("CONEXÃO FEITA COM O SERVERVIDOR NA PORTA: " + porta);
         System.out.println("=====================================");
@@ -40,7 +35,9 @@ public class Cliente implements Runnable{
     }
 
      public String loopMensagem(String msg) throws IOException{
-        String vc;
+        String vc = "";
+
+        
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         Date hora = Calendar.getInstance().getTime(); 
@@ -49,7 +46,8 @@ public class Cliente implements Runnable{
 
         vc = "Você: " + msg + " " + data;
         return vc;
-    }
+        }
+
 
     public String recebeMsgServidor(){
         String msg;
@@ -67,7 +65,17 @@ public class Cliente implements Runnable{
         return msg;
     }
 
- 
+    public String recebeListaServidor(){
+        String list;
+        list = metodo();
+        return list;
+    }
+
+    public void close(){
+        clientSocket.close();
+    }
+
+
 
     @Override
     public void run(){

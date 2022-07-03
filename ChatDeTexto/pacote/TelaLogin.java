@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 
 public class TelaLogin extends JFrame implements Action {
     static TelaLogin teste;
@@ -44,7 +43,7 @@ public class TelaLogin extends JFrame implements Action {
         setLayout(null);
         setBackground(new Color (195, 160 , 110));
         getContentPane().setBackground(new Color (224, 255 , 255));
-        setTitle("Chat");
+        setTitle("Login");
         
         
         
@@ -118,10 +117,12 @@ public class TelaLogin extends JFrame implements Action {
        Cliente cliente = new Cliente(nome, porta, ip);
        cliente.start();
 
+       cliente.loopMensagem(" : Conectou");
+
        Chat test = new Chat(cliente);
        test.start();
 
-       teste.dispose();
+       
 
 
 
@@ -130,6 +131,7 @@ public class TelaLogin extends JFrame implements Action {
         JOptionPane.showMessageDialog(null, "Servidor não iniciado ou dados faltando", "ERRO", JOptionPane.ERROR_MESSAGE);
 
     }
+        teste.dispose();
         
     }
 
