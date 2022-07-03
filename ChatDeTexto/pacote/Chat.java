@@ -12,7 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 
 public class Chat extends JFrame  implements Action {
@@ -41,7 +40,7 @@ public class Chat extends JFrame  implements Action {
         setDefaultCloseOperation(Chat.DISPOSE_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color (224, 255 , 255));
+        getContentPane().setBackground(new Color (240,255,240));
         addWindowListener(new WindowListener(){
             @Override
             public void windowOpened(WindowEvent e){}
@@ -79,13 +78,14 @@ public class Chat extends JFrame  implements Action {
         enviaMsgButton.setBounds(570,530,80,45);
         enviaMsgButton.setFont(new Font("Arial", Font.BOLD, 20));
         enviaMsgButton.setForeground(new Color (25, 25 , 25));
+        enviaMsgButton.setBackground(new Color (128,128,128));
         
 
         msgPane = new JEditorPane();
         
         msgPane.setEditable(false);
         msgPane.setContentType("text/html");
-        msgPane.setBackground(new Color (176, 196 , 222));
+        msgPane.setBackground(new Color (211,211,211));
         
         
 
@@ -95,6 +95,7 @@ public class Chat extends JFrame  implements Action {
 
         enviaMsgField = new JTextField("");
         enviaMsgField.setBounds(250, 530,300, 45);
+        enviaMsgField.setBackground(new Color(255,255,255));
         enviaMsgField.addKeyListener(new KeyListener(){
         public void key(KeyEvent e){
             if(e.getKeyChar() == KeyEvent.VK_ENTER){

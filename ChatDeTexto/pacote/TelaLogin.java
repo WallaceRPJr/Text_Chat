@@ -41,8 +41,7 @@ public class TelaLogin extends JFrame implements Action {
         setResizable(false);
         setLocationRelativeTo(null);
         setLayout(null);
-        setBackground(new Color (195, 160 , 110));
-        getContentPane().setBackground(new Color (224, 255 , 255));
+        getContentPane().setBackground(new Color (211,211,211));
         setTitle("Login");
         
         
@@ -50,8 +49,8 @@ public class TelaLogin extends JFrame implements Action {
 
         botao.setBounds(200,320,100,50);
         botao.setFont(new Font("Arial", Font.BOLD, 20));
-        botao.setForeground(new Color (25, 25 , 25));
-        botao.setBackground(new Color (181, 199 , 211));
+        botao.setForeground(new Color (1, 1 , 1));
+        botao.setBackground(new Color (128,128,128));
 
         nomeField = new JTextField("");
         nomeField.setBounds(140, 50, 200, 45);
