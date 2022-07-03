@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Servidor {
-        public static final int porta = 15001;
+        public static final int porta = 15000;
         private ServerSocket serverSocket;
         private final List <ClienteSocket> clientes = new LinkedList<>();
         private final List <String> allMsg = new LinkedList<>();

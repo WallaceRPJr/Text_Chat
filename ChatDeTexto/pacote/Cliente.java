@@ -11,13 +11,13 @@ import java.util.Date;
 
 public class Cliente implements Runnable{
     private String ip;
-    private int porta;
+    private String porta;
     private Scanner in = new Scanner(System.in);
     private String nome;
     ClienteSocket clientSocket;
     Date d = new Date();
 
-    public Cliente(String nome, int porta, String ip){
+    public Cliente(String nome, String porta, String ip){
         this.ip = ip;
         this.nome = nome;
         this.porta = porta;
@@ -27,42 +27,55 @@ public class Cliente implements Runnable{
 
     public void start() throws UnknownHostException, IOException{
         try{
-         clientSocket = new ClienteSocket(new Socket(ip, porta)); 
+         clientSocket = new ClienteSocket(new Socket(ip, Integer.parseInt(porta))); 
         System.out.println("=====================================");
         System.out.println("CONEXÃO FEITA COM O SERVERVIDOR NA PORTA: " + porta);
         System.out.println("=====================================");
 
-       // new Thread(this).start();
-        loopMensagem();
-        } finally{clientSocket.close();}
+        //new Thread(this).start();
+        //loopMensagem();
+        }catch (IOException tr){
+           return;
+        }
     }
 
-    private void loopMensagem() throws IOException{
-        String msg = null;
-        System.out.println("DIGITE UMA MENSAGEM");
-        System.out.println("PARA SAIR DIGITE SAIR");
-    do{
-        msg = in.nextLine();
-        if(msg.equalsIgnoreCase("sair"))msg = "desconectou";
+     public String loopMensagem(String msg) throws IOException{
+        String vc;
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         Date hora = Calendar.getInstance().getTime(); 
         String data = sdf.format(hora);
-        clientSocket.sendMsg(nome + ": " + msg + " " + data );
+        clientSocket.sendMsg(nome + ": " + msg + " " + data );  
 
-        if(msg.equalsIgnoreCase("desconectou"))msg = "sair";
-
-    }while(!msg.equalsIgnoreCase("sair"));
+        vc = "Você: " + msg + " " + data;
+        return vc;
     }
+
+    public String recebeMsgServidor(){
+        String msg;
+        new Thread(
+            msg = this.metodo()
+        ).start();
+        return msg;
+    }
+
+    public String metodo(){
+        String msg = "null";
+        while((msg = clientSocket.getMsg()) != "null"){
+        return msg;
+        }
+        return msg;
+    }
+
+ 
 
     @Override
     public void run(){
         String msg;
-
         while((msg = clientSocket.getMsg()) != null){
         System.out.println(msg);
         }
     }
 
-
+    
 }

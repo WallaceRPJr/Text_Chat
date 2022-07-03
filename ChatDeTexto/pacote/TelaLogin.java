@@ -9,18 +9,25 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 public class TelaLogin extends JFrame implements Action {
+    static TelaLogin teste;
+
     JButton botao = new JButton("Pronto");
+
     JTextField nomeField;
-    JTextField ipField;
     JTextField portaField;
+    JTextField ipField;
+
     String nome;
-    Integer ip;
     String porta;
+    String ip;
+
     JLabel nomeJLabel;
     JLabel ipJLabel;
     JLabel portaJLabel;
+
 
 
     public TelaLogin(){
@@ -36,6 +43,11 @@ public class TelaLogin extends JFrame implements Action {
         setLocationRelativeTo(null);
         setLayout(null);
         setBackground(new Color (195, 160 , 110));
+        getContentPane().setBackground(new Color (224, 255 , 255));
+        setTitle("Chat");
+        
+        
+        
 
         botao.setBounds(200,320,100,50);
         botao.setFont(new Font("Arial", Font.BOLD, 20));
@@ -45,21 +57,21 @@ public class TelaLogin extends JFrame implements Action {
         nomeField = new JTextField("");
         nomeField.setBounds(140, 50, 200, 45);
 
-        ipField = new JTextField("");
-        ipField.setBounds(140, 150, 200, 45);
-
         portaField = new JTextField("");
-        portaField.setBounds(140, 250, 200, 45);
+        portaField.setBounds(140, 150, 200, 45);
+
+        ipField = new JTextField("");
+        ipField.setBounds(140, 250, 200, 45);
 
         nomeJLabel = new JLabel("Nome");
         nomeJLabel.setBounds(140, 15, 100, 45);
         nomeJLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        portaJLabel = new JLabel("Porta");
+        portaJLabel = new JLabel("IP");
         portaJLabel.setBounds(140, 215, 100, 45);
         portaJLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        ipJLabel = new JLabel("IP");
+        ipJLabel = new JLabel("Porta");
         ipJLabel.setBounds(140, 115, 100, 45);
         ipJLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
@@ -67,8 +79,8 @@ public class TelaLogin extends JFrame implements Action {
 
     private void adicionar(){
         add(nomeField);
-        add(ipField);
         add(portaField);
+        add(ipField);
         add(botao);
         add(nomeJLabel);
         add(portaJLabel);
@@ -93,29 +105,30 @@ public class TelaLogin extends JFrame implements Action {
 
     
     public static void main (String [] args){
-        TelaLogin teste = new TelaLogin();
+        teste = new TelaLogin();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       
-        if(nomeField.getText() == "" || ipField.getText() == "" || portaField.getText() == ""){
-            JOptionPane.showMessageDialog(null, "DADOS FALTANDO", "ERRO",JOptionPane.ERROR_MESSAGE);
-        }
-       
-       
-        nome = nomeField.getText();
-       ip = Integer.parseInt(ipField.getText());
+        try {
+
+       nome = nomeField.getText();
        porta = portaField.getText();
+       ip = ipField.getText();
+       Cliente cliente = new Cliente(nome, porta, ip);
+       cliente.start();
+
+       Chat test = new Chat(cliente);
+       test.start();
+
+       teste.dispose();
 
 
-       try {
-       Cliente cliente = new Cliente(nome, ip, porta);
 
-       
-        cliente.start();
+
     } catch (IOException e1) {
-        JOptionPane.showMessageDialog(null, "SERVIDOR PODE NÃO TER SIDO INICIADO", "ERRO",JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Servidor não iniciado ou dados faltando", "ERRO", JOptionPane.ERROR_MESSAGE);
+
     }
         
     }
