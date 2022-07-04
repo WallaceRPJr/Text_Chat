@@ -12,11 +12,11 @@ public class Cliente implements Runnable{
     ClienteSocket clientSocket;
     Date d = new Date();
 
+    
     public Cliente(String nome, String porta, String ip){
         this.ip = ip;
         this.nome = nome;
         this.porta = porta;
-
     }
 
 
@@ -26,18 +26,15 @@ public class Cliente implements Runnable{
         System.out.println("=====================================");
         System.out.println("CONEXÃO FEITA COM O SERVERVIDOR NA PORTA: " + porta);
         System.out.println("=====================================");
-
-        //new Thread(this).start();
-        //loopMensagem();
+        clientSocket.sendMsg(nome);
         }catch (IOException tr){
            return;
         }
     }
 
-     public String loopMensagem(String msg) throws IOException{
-        String vc = "";
 
-        
+    public String loopMensagem(String msg) throws IOException{
+        String vc = "";
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         Date hora = Calendar.getInstance().getTime(); 
@@ -57,6 +54,7 @@ public class Cliente implements Runnable{
         return msg;
     }
 
+
     public String metodo(){
         String msg = "null";
         while((msg = clientSocket.getMsg()) != "null"){
@@ -65,17 +63,10 @@ public class Cliente implements Runnable{
         return msg;
     }
 
-    public String recebeListaServidor(){
-        String list;
-        list = metodo();
-        return list;
-    }
 
     public void close(){
         clientSocket.close();
     }
-
-
 
     @Override
     public void run(){
@@ -84,6 +75,4 @@ public class Cliente implements Runnable{
         System.out.println(msg);
         }
     }
-
-    
 }

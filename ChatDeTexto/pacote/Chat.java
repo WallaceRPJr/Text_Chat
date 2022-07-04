@@ -18,10 +18,14 @@ public class Chat extends JFrame  implements Action {
     
     private JButton enviaMsgButton;
     private JButton attListButton;
+
     private JEditorPane msgPane;
-    private JTextField enviaMsgField;
     private JEditorPane onlinePane;
+
+    private JTextField enviaMsgField;
+    
     private JScrollPane scrollPane;
+    
     private JPanel panel;
 
     ArrayList<String> msgLista = new ArrayList<String>();
@@ -37,7 +41,7 @@ public class Chat extends JFrame  implements Action {
         setSize(700, 650);
         setLayout(new BorderLayout());
         setTitle("Chat");
-        setDefaultCloseOperation(Chat.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(Chat.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
         getContentPane().setBackground(new Color (240,255,240));
@@ -48,13 +52,18 @@ public class Chat extends JFrame  implements Action {
             public void windowClosing(WindowEvent e) {
                 try {
                     cliente.loopMensagem("DESCONECTOU");
-                    cliente.close();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
             @Override
-            public void windowClosed(WindowEvent e) {}
+            public void windowClosed(WindowEvent e) {
+                try {
+                    cliente.loopMensagem("DESCONECTOU");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }}
+
             @Override
             public void windowIconified(WindowEvent e) {}
             @Override
@@ -66,13 +75,19 @@ public class Chat extends JFrame  implements Action {
             
         });
 
+
+
         panel = new JPanel(new BorderLayout());
+
+
 
         attListButton = new JButton("Atualizar Lista");
         attListButton.setBounds(5,15,240,45);
         attListButton.setFont(new Font("Arial", Font.BOLD, 20));
         attListButton.setForeground(new Color (25, 25 , 25));
         attListButton.setBackground(new Color (70, 130 , 180));
+
+
 
         enviaMsgButton = new JButton(">");
         enviaMsgButton.setBounds(570,530,80,45);
@@ -81,8 +96,8 @@ public class Chat extends JFrame  implements Action {
         enviaMsgButton.setBackground(new Color (128,128,128));
         
 
+
         msgPane = new JEditorPane();
-        
         msgPane.setEditable(false);
         msgPane.setContentType("text/html");
         msgPane.setBackground(new Color (211,211,211));
@@ -93,6 +108,8 @@ public class Chat extends JFrame  implements Action {
         onlinePane.setBounds(5, 65, 240, 510);
         onlinePane.setEditable(false);
 
+
+
         enviaMsgField = new JTextField("");
         enviaMsgField.setBounds(250, 530,300, 45);
         enviaMsgField.setBackground(new Color(255,255,255));
@@ -101,23 +118,23 @@ public class Chat extends JFrame  implements Action {
             if(e.getKeyChar() == KeyEvent.VK_ENTER){
                     send();
                     enviaMsgField.setText("");
-            }
-            }
+            }}
 
             @Override
             public void keyTyped(KeyEvent e){}
             @Override
-            public void keyPressed(KeyEvent e){
-                key(e);
-            }
+            public void keyPressed(KeyEvent e){key(e);}
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+
+
 
         scrollPane = new JScrollPane(msgPane);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     }
+
 
     private void adiciona(){
         add(scrollPane,BorderLayout.CENTER);
@@ -126,7 +143,6 @@ public class Chat extends JFrame  implements Action {
         panel.add(enviaMsgButton, BorderLayout.EAST);
 
         enviaMsgButton.addActionListener(this);
-        
     }
     
 
@@ -134,14 +150,13 @@ public class Chat extends JFrame  implements Action {
         setVisible(true);
     }
 
+
     private void msgLoop(){
         while(true){
         String msg = cliente.recebeMsgServidor();
         if (!msg.equalsIgnoreCase("null")){
             addMsgLista(msg + "<br>");
-        }
-    }
-    }
+        }}}
 
 
     public void start(){
@@ -150,8 +165,8 @@ public class Chat extends JFrame  implements Action {
         visivel();
 
         new Thread(() -> msgLoop()).start();
-
     }
+
 
     private void addMsgLista(String msg){
         msgLista.add(msg);
@@ -162,6 +177,7 @@ public class Chat extends JFrame  implements Action {
         msgPane.setText(mensagem);
     }
 
+
     public void send(){
         String vc;
         try {
@@ -169,13 +185,15 @@ public class Chat extends JFrame  implements Action {
             addMsgLista(vc + "<br>");
         } catch (IOException e) {
             e.printStackTrace();
-        }            
-    }
+        }}
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
             send();
             enviaMsgField.setText("");
     }
+
     @Override
     public Object getValue(String key) {return null;}
     @Override

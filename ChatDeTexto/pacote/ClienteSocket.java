@@ -25,6 +25,10 @@ public class ClienteSocket {
     public String getNome(){
         return login;
     }
+
+    public void setNome(String nome){
+        this.login = nome;
+    }
      
     public String getMsg(){
         try {
