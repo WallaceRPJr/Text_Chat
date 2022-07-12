@@ -44,7 +44,8 @@ public class Servidor {
                 Date hora = Calendar.getInstance().getTime(); 
                 String data = sdf.format(hora);
 
-                msgTds(socketeCliente,  socketeCliente.getNome() + " Desconectou " + data);
+                msgTds(socketeCliente,  socketeCliente.getNome() + ": Desconectou " + data);
+                allMsg.add(socketeCliente.getNome() + ": Desconectou " + data);
             }else{
                 System.out.println("Cliente: " + socketeCliente.getRemoteSocketAddress() + "Enviou: " + msg);
                 allMsg.add(msg);
