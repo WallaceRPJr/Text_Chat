@@ -10,6 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+/**
+ * Classe TelaLogin: Primeira tela do projeto, tela executada pelo usuario.
+ */
+
 public class TelaLogin extends JFrame implements Action {
     static TelaLogin teste;
 
@@ -27,7 +31,9 @@ public class TelaLogin extends JFrame implements Action {
     JLabel ipJLabel;
     JLabel portaJLabel;
 
-
+    /**
+     * Metodo TelaLogin: usado para estanciar a classe com todas as configurações já setadas.
+     */
 
     public TelaLogin(){
         config();
@@ -35,6 +41,9 @@ public class TelaLogin extends JFrame implements Action {
         visivel();
     }
 
+    /**
+     * Metodo config: Configura todos os elementos graficos da janela.
+     */
 
     private void config(){
         setSize(500, 450);
@@ -87,6 +96,10 @@ public class TelaLogin extends JFrame implements Action {
         ipJLabel.setFont(new Font("Arial", Font.BOLD, 20));
     };
 
+    /**
+     *  Metodo adiciona: Adiciona todos os elemetos a janela, e a ação ao Botão
+     */
+
     private void adicionar(){
         add(nomeField);
         add(portaField);
@@ -99,16 +112,18 @@ public class TelaLogin extends JFrame implements Action {
         botao.addActionListener(this);
     };
 
+    /**
+     *  Metodo visivel: Deixa a tela visivel ao usuario.
+     */
 
     private void visivel(){
         setVisible(true);
     };
 
-
-    public static void main (String [] args){
-        teste = new TelaLogin();
-    }
-
+    /**
+     *  Metodo actionPerformed: usado quando o botão é selecionado, pegata todos os tres campus e inicia
+     * uma conexão com o servidor, enviando assim para o mesmo que esta conectado.
+     */
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -119,7 +134,7 @@ public class TelaLogin extends JFrame implements Action {
        Cliente cliente = new Cliente(nome, porta, ip);
        cliente.start();
 
-       cliente.loopMensagem( ": Conectou");
+       cliente.enviarMsgServidor( ": Conectou");
 
        Chat test = new Chat(cliente);
        test.start();
@@ -134,4 +149,10 @@ public class TelaLogin extends JFrame implements Action {
 
     @Override
     public void putValue(String key, Object value) {}
+
+
+    
+    public static void main (String [] args){
+        teste = new TelaLogin();
+    }
 }

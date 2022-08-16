@@ -14,6 +14,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 
+/**  
+ *  Clase que representa o Frame de Chat, onde o usuario recebe e envia as mensagens
+ * 
+*/
+
+
 public class Chat extends JFrame  implements Action {
     
     private JButton enviaMsgButton;
@@ -28,14 +34,19 @@ public class Chat extends JFrame  implements Action {
     
     private JPanel panel;
 
-    ArrayList<String> msgLista = new ArrayList<String>();
-    ArrayList<String> onlineLista = new ArrayList<String>();
+    ArrayList<String> msgLista = new ArrayList<String>(); // Lista de todas as mensagens recebidas
 
     Cliente cliente;
 
     public Chat(Cliente cliente){
        this.cliente = cliente;
     }
+
+
+    /**
+     *      Metodo config: Usado para as configuações da pagina, tais como tamanho, posição, cor,
+     * dos elementos Graficos, por exemplo: botão, campo de texto ou painel. 
+     */
 
     public void config(){
         setSize(700, 650);
@@ -48,10 +59,18 @@ public class Chat extends JFrame  implements Action {
         addWindowListener(new WindowListener(){
             @Override
             public void windowOpened(WindowEvent e){}
+
+    /**
+     *  
+     * Metodo windowClosing: Usado quando o usuario fecha a janela. Envia "DESCONECTOU" para o servidor,
+     * assim ele entende que o usuario saiu e envia para os demais.
+     * @param WindowEvent 
+     * */         
+
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(WindowEvent e) {   
                 try {
-                    cliente.loopMensagem("DESCONECTOU");
+                    cliente.enviarMsgServidor("DESCONECTOU");
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -59,7 +78,7 @@ public class Chat extends JFrame  implements Action {
             @Override
             public void windowClosed(WindowEvent e) {
                 try {
-                    cliente.loopMensagem("DESCONECTOU");
+                    cliente.enviarMsgServidor("DESCONECTOU");
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }}
@@ -114,7 +133,14 @@ public class Chat extends JFrame  implements Action {
         enviaMsgField.setBounds(250, 530,300, 45);
         enviaMsgField.setBackground(new Color(255,255,255));
         enviaMsgField.addKeyListener(new KeyListener(){
-        public void key(KeyEvent e){
+        
+            /**
+             * Metodo key: Usado quando o usuario preciona a tecla ENTER; assim pegando os caracteres de enviaMsgFild
+             * e envia para o metodo send();.
+             * @param KeyEvent
+             */
+        
+            public void key(KeyEvent e){
             if(e.getKeyChar() == KeyEvent.VK_ENTER){
                     send();
                     enviaMsgField.setText("");
@@ -136,6 +162,10 @@ public class Chat extends JFrame  implements Action {
     }
 
 
+    /**
+     *  Metodo adiciona: Adiciona todos os elementos grafios a tela.
+     */
+
     private void adiciona(){
         add(scrollPane,BorderLayout.CENTER);
         add(panel, BorderLayout.SOUTH);
@@ -145,11 +175,18 @@ public class Chat extends JFrame  implements Action {
         enviaMsgButton.addActionListener(this);
     }
     
+    /**
+     * Metodo visivel: Deixa a tela visivel ao usuario.
+     */
 
     private void visivel(){
         setVisible(true);
     }
 
+    /**
+     * Metodo msgLoop: Loop para receber todas mensagens diferentes de "null" e colocar passar para o metodo
+     * addMsgLista.
+     */
 
     private void msgLoop(){
         while(true){
@@ -158,15 +195,31 @@ public class Chat extends JFrame  implements Action {
             addMsgLista(msg + "<br>");
         }}}
 
+    /**
+     * Metodo start: Estancia os metodos: config(), adiciona(), visivel(), e manda uma mesagem para o usuario
+     * assim que a tela fica visivel ao mesmo. Juntamente inicia a thread com o metodo msgLoop, para assim fazer
+     * duas funções ao mesmo tempo 
+     * */    
 
     public void start(){
         config();
         adiciona();
         visivel();
 
+        addMsgLista("==================================================================="+ "<br>");
+        addMsgLista("=== BEM VINDO"+ "<br>");
+        addMsgLista("=== PARA ENVIAR UMA MENSAGEM PRIVADA"+ "<br>");
+        addMsgLista("=== DIGITE: /user nomeDoUsuario"+ "<br>");
+        addMsgLista("=== MAS CERTIFIQUE-SE DE QUE ELE ESTEJA CONECTECTADO"+ "<br>");
+        addMsgLista("==================================================================="+ "<br>");
+
         new Thread(() -> msgLoop()).start();
     }
 
+    /**
+     * Metodo addMsgLista: adiciona a String recebida a msgLista, e atualiza o painel msgPane.
+     * @param String
+     */
 
     private void addMsgLista(String msg){
         msgLista.add(msg);
@@ -177,16 +230,24 @@ public class Chat extends JFrame  implements Action {
         msgPane.setText(mensagem);
     }
 
+    /**
+     *  Metodo send: Pega os caracteres do campo de texto enviaMsgField envia ao servidor passa para o metodo 
+     * addMsgLista.
+     */
+
 
     public void send(){
         String vc;
         try {
-            vc = cliente.loopMensagem(enviaMsgField.getText());
+            vc = cliente.enviarMsgServidor(enviaMsgField.getText());
             addMsgLista(vc + "<br>");
         } catch (IOException e) {
             e.printStackTrace();
         }}
 
+    /**
+     *  Metodo actionPerformed: seleciona a Ação ao clicar no botão.  
+     * */
 
     @Override
     public void actionPerformed(ActionEvent e) {

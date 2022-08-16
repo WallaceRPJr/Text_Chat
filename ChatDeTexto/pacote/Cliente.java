@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+
 public class Cliente implements Runnable{
     private String ip;
     private String porta;
@@ -12,6 +13,12 @@ public class Cliente implements Runnable{
     ClienteSocket clientSocket;
     Date d = new Date();
 
+    /**
+     *  Classe Cliente: usada para fazer a conexão com o servidor e interagir com a classe ClienteSocket
+     * @param nome
+     * @param porta
+     * @param ip
+     */
     
     public Cliente(String nome, String porta, String ip){
         this.ip = ip;
@@ -19,6 +26,11 @@ public class Cliente implements Runnable{
         this.porta = porta;
     }
 
+    /**
+     *  Metodo start: Inicia uma conexão e envia o nome do usuario ao servidor
+     * @throws UnknownHostException
+     * @throws IOException
+     */
 
     public void start() throws UnknownHostException, IOException{
         try{
@@ -32,8 +44,15 @@ public class Cliente implements Runnable{
         }
     }
 
+    /**
+     *  Metodo enviarMsgServidor : tem como parametro uma String, onde adiciona a essa String nome e a hora
+     * para assim enviar para o servidor, e retorna uma String para atualizar o painel de mensagens do usuario 
+     * @param msg
+     * @return
+     * @throws IOException
+     */
 
-    public String loopMensagem(String msg) throws IOException{
+    public String enviarMsgServidor(String msg) throws IOException{
         String vc = "";
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -45,6 +64,11 @@ public class Cliente implements Runnable{
         return vc;
         }
 
+    /**
+     *  Metodo receberMsgServidor: Inicia uma thread usando o metodo(), para que possa ser feita outra atividade
+     * ao mesmo tempo. Assim retorna uma mensagem, a qual é recebida pelo servidor.
+     * @return
+     */    
 
     public String recebeMsgServidor(){
         String msg;
@@ -54,6 +78,10 @@ public class Cliente implements Runnable{
         return msg;
     }
 
+    /**
+     * Metodo metodo: Usado para um thread, recebe uma mensagem do servidor e retorna a mesma.
+     * @return
+     */
 
     public String metodo(){
         String msg = "null";
@@ -63,6 +91,9 @@ public class Cliente implements Runnable{
         return msg;
     }
 
+    /**
+     *  Metodo close: usado para fechar conexão
+     */
 
     public void close(){
         clientSocket.close();

@@ -28,7 +28,7 @@ public class Servidor {
         socketeCliente.setNome(x);
         clientes.add(socketeCliente);
         for(String msg : allMsg){
-            msgAll(socketeCliente, msg);
+            sendMsgUser(socketeCliente, msg);
             }
             new Thread(() -> clienteMsgLoop(socketeCliente)).start();
             }
@@ -39,24 +39,40 @@ public class Servidor {
         String msg;
         try{
         while((msg = socketeCliente.getMsg()) != null){
+
+            if (msg.contains("/user")){
+                msg = msg.replace(socketeCliente.getNome(), "");
+                    for (ClienteSocket receptor : clientes){
+                        if (msg.contains(receptor.getNome())){         
+                            msg = msg.replace("/user", " SUSSUROU: ");
+                            sendMsgUser(receptor,socketeCliente.getNome() + msg); 
+                            break;
+                        }
+                    }
+            }else{
+
             if(msg.contains("DESCONECTOU")){
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                 Date hora = Calendar.getInstance().getTime(); 
                 String data = sdf.format(hora);
 
-                msgTds(socketeCliente,  socketeCliente.getNome() + ": Desconectou " + data);
+                sendMsgAll(socketeCliente,  socketeCliente.getNome() + ": Desconectou " + data);
                 allMsg.add(socketeCliente.getNome() + ": Desconectou " + data);
             }else{
+                if(!msg.contains("/")){
                 System.out.println("Cliente: " + socketeCliente.getRemoteSocketAddress() + "Enviou: " + msg);
                 allMsg.add(msg);
-                msgTds(socketeCliente, msg);
+                sendMsgAll(socketeCliente, msg);
+                }
                 }
             }
+}
+
         } finally {socketeCliente.close();}
     }
 
 
-    private void msgTds(ClienteSocket emissor, String msg){
+    private void sendMsgAll(ClienteSocket emissor, String msg){
         Iterator <ClienteSocket> iterator = clientes.iterator();
         while(iterator.hasNext()){
             ClienteSocket clienteSocket = iterator.next();
@@ -67,7 +83,7 @@ public class Servidor {
         }}
 
 
-    private void msgAll(ClienteSocket emissor, String msg){
+    private void sendMsgUser(ClienteSocket emissor, String msg){
         Iterator <ClienteSocket> iterator = clientes.iterator();
         while(iterator.hasNext()){
             ClienteSocket clienteSocket = iterator.next();

@@ -11,6 +11,13 @@ public class ClienteSocket {
     private  BufferedReader in; // Obj de Entrada
     private  PrintWriter out;  // Obj de Saida
 
+    /**
+     * Objeto usado por ambos (Servidor e usuario) para o envio e recebimento das mensagens
+     * @param socket
+     * @param login
+     * @throws IOException
+     */
+
     public ClienteSocket(Socket socket, String login) throws IOException{
         this.login = login;
         this.socket = socket;
@@ -18,10 +25,19 @@ public class ClienteSocket {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new PrintWriter(socket.getOutputStream(), true);
     }
-
+    /**
+     *  Metodo getRemoteSocketAddress: Retorna IP e PORTA do Objeto ClienteSocket
+     * @return
+     */
     public SocketAddress getRemoteSocketAddress(){
         return  socket.getRemoteSocketAddress(); 
     }
+
+    /**
+     *  Metodo getNome : Retorna a String login, usada também como nome.
+     * @return
+     */
+
     public String getNome(){
         return login;
     }
@@ -29,6 +45,11 @@ public class ClienteSocket {
     public void setNome(String nome){
         this.login = nome;
     }
+
+    /**
+     *  Metodo getMsg: Retorna uma String, usado para receber mensagem.
+     * @return
+     */
      
     public String getMsg(){
         try {
@@ -38,11 +59,20 @@ public class ClienteSocket {
         }
     }
 
+    /**
+     *   Metodo sendMsg: Envia a String passada como parametro, retorna boolean para chegar se a mensagem foi envia
+     * @param msg
+     * @return
+     */
+
     public boolean sendMsg(String msg){
         out.println(msg);
         return !out.checkError();
     }
 
+    /**
+     *  Metodo close: Encera todos os tipos de conexões feitas por sockets
+     */
 
     public void close(){
         try {
