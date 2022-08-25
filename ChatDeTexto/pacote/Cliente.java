@@ -21,6 +21,7 @@ public class Cliente implements Runnable{
      */
     
     public Cliente(String nome, String porta, String ip){
+        
         this.ip = ip;
         this.nome = nome;
         this.porta = porta;

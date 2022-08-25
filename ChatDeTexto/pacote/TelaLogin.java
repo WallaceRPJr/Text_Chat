@@ -151,7 +151,6 @@ public class TelaLogin extends JFrame implements Action {
     public void putValue(String key, Object value) {}
 
 
-    
     public static void main (String [] args){
         teste = new TelaLogin();
     }

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Servidor {
-        public static final int porta = 15000;
+        public static final int porta = 15001;
         private ServerSocket serverSocket;
         private final List <ClienteSocket> clientes = new LinkedList<>();
         private final List <String> allMsg = new LinkedList<>();
@@ -27,9 +27,11 @@ public class Servidor {
         String x = socketeCliente.getMsg();
         socketeCliente.setNome(x);
         clientes.add(socketeCliente);
+
         for(String msg : allMsg){
             sendMsgUser(socketeCliente, msg);
             }
+
             new Thread(() -> clienteMsgLoop(socketeCliente)).start();
             }
         }   
@@ -44,7 +46,8 @@ public class Servidor {
                 msg = msg.replace(socketeCliente.getNome(), "");
                     for (ClienteSocket receptor : clientes){
                         if (msg.contains(receptor.getNome())){         
-                            msg = msg.replace("/user", " SUSSUROU: ");
+                            msg = msg.replace("/user", " SUSSUROU PARA VOCÊ: ");
+                            msg = msg.replace(receptor.getNome(), "");
                             sendMsgUser(receptor,socketeCliente.getNome() + msg); 
                             break;
                         }

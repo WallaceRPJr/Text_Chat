@@ -39,6 +39,7 @@ public class Chat extends JFrame  implements Action {
     Cliente cliente;
 
     public Chat(Cliente cliente){
+        
        this.cliente = cliente;
     }
 

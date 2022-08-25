@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 public class ClienteSocket {
+    
     private  String login;
     private  Socket socket;
     private  BufferedReader in; // Obj de Entrada
